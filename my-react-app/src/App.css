@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+  min-height: 100vh;
+}
+
+.card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 360px;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.row {
+  margin-bottom: 15px;
+}
+
+.row label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.row input,
+.row select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.checkbox-row {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 5px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  flex: 1;
+}
+
+.btn.primary {
+  background: #28a745;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.btn.secondary {
+  background: #007bff;
+  color: #fff;
+}
+
+.price-box {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f0f0f0;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #333;
+}
