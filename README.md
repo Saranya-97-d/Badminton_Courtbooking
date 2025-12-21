@@ -18,6 +18,12 @@ Badminton_Courtbooking/
 │   └── README.md
 │
 └── README.md
-The application can also be containerized using Docker and Docker Compose, allowing all services to run in isolated and consistent environments for easier development and deployment.but for now to run this we should packages present in requirements.txt.
 
-For database handling, MongoDB is used as the primary persistent data store to manage courts, bookings, coaches, and equipment data. Redis can additionally be used as an in-memory data store to handle concurrency control, temporary booking locks, and caching of frequently accessed data. Using Redis helps prevent double booking scenarios and improves performance during high-traffic booking requests.
+**note**
+requirements
+Flask==3.0.0
+flask-cors==4.0.0
+pymongo==4.6.1
+
+I am also planning to use  containerize the application  using Docker , allowing all services to run in isolated and consistent environments for easier development and deployment.but for now to run this we should packages present in requirements.txt.
+and also For database handling, MongoDB is used as the primary persistent data store to manage courts, bookings, coaches, and equipment data. Redis can additionally be used as an in-memory data store to handle concurrency control, temporary booking locks, and caching of frequently accessed data. Using Redis helps prevent double booking scenarios and improves performance during high-traffic booking requests.
