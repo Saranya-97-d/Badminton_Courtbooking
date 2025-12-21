@@ -1,7 +1,4 @@
-A full-stack Badminton Court Booking Application built with Flask + MongoDB (Backend) and React + Vite (Frontend).
-The system supports court booking, equipment rental, coach booking, price calculation, and concurrency-safe reservations.
-
-
+A full-stack Badminton Court Booking Application built with Flask and MongoDB for the backend and React with Vite for the frontend. The system supports court booking, equipment rental, coach booking, dynamic price calculation, and concurrency-safe reservations.
 Project Structure:
 
 Badminton_Courtbooking/
@@ -21,3 +18,6 @@ Badminton_Courtbooking/
 │   └── README.md
 │
 └── README.md
+The application can also be containerized using Docker and Docker Compose, allowing all services to run in isolated and consistent environments for easier development and deployment.but for now to run this we should packages present in requirements.txt.
+
+For database handling, MongoDB is used as the primary persistent data store to manage courts, bookings, coaches, and equipment data. Redis can additionally be used as an in-memory data store to handle concurrency control, temporary booking locks, and caching of frequently accessed data. Using Redis helps prevent double booking scenarios and improves performance during high-traffic booking requests.
