@@ -7,11 +7,11 @@ from db import bookings_col, courts_col, coaches_col, equipment_col
 app = Flask(__name__)
 CORS(app)
 
-# ---------------- OPERATING HOURS ---------------- #
+# OPERATING HOURS  #
 OPEN_TIME = "06:00"
 CLOSE_TIME = "23:00"
 
-# ---------------- PRICING CONFIG ---------------- #
+#  PRICING CONFIG  #
 PRICING_CONFIG = {
     "base_price_per_hour": 300,
     "indoor_premium_per_hour": 200,
@@ -21,7 +21,7 @@ PRICING_CONFIG = {
     "coach_price_per_hour": 400
 }
 
-# ---------------- TIME HELPERS ---------------- #
+# TIME HELPERS  #
 def time_to_minutes(time_str):
     h, m = map(int, time_str.split(":"))
     return h * 60 + m
@@ -46,7 +46,7 @@ def is_within_operating_hours(start_time, hours):
         and end <= time_to_minutes(CLOSE_TIME)
     )
 
-# ---------------- COACH LOGIC ---------------- #
+# -COACH LOGIC #
 def find_available_coach(date, start_time, hours):
     for c in coaches_col.find({"active": True}):
         clash = False
@@ -58,7 +58,7 @@ def find_available_coach(date, start_time, hours):
             return c["coach_id"]
     return None
 
-# ---------------- EQUIPMENT LOGIC ---------------- #
+# EQUIPMENT LOGIC #
 def equipment_available(item, date, start_time, hours, requested_qty):
     eq_doc = equipment_col.find_one({"item": item})
     if not eq_doc:
@@ -73,7 +73,7 @@ def equipment_available(item, date, start_time, hours, requested_qty):
 
     return used + requested_qty <= total
 
-# ---------------- PRICE API ---------------- #
+# PRICE API #
 @app.route("/price", methods=["POST"])
 def calculate_price():
     data = request.get_json()
@@ -122,7 +122,7 @@ def calculate_price():
         "total_price": round(grand_total, 2)
     })
 
-# ---------------- BOOK API ---------------- #
+# BOOK API #
 @app.route("/book", methods=["POST"])
 def book():
     data = request.get_json()
@@ -169,11 +169,11 @@ def book():
 
     return jsonify({"message": "Booking confirmed", "coach_assigned": coach_id}), 201
 
-# ---------------- GET BOOKINGS ---------------- #
+#  GET BOOKINGS  #
 @app.route("/bookings", methods=["GET"])
 def get_bookings():
     return jsonify(list(bookings_col.find({}, {"_id": 0})))
 
-# ---------------- RUN APP ---------------- #
+# RUN APP #
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
