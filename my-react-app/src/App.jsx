@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-
+import "./App.css";
+import "./index.css"
 function App() {
   const [date, setDate] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -10,7 +11,6 @@ function App() {
   const [priceData, setPriceData] = useState(null);
   const [bookingMessage, setBookingMessage] = useState("");
 
-  // Convert counts to array for backend
   const equipmentArray = [];
   Object.keys(equipmentCount).forEach((item) => {
     for (let i = 0; i < equipmentCount[item]; i++) {
@@ -18,35 +18,30 @@ function App() {
     }
   });
 
-  // Fetch price whenever inputs change
   useEffect(() => {
     if (!courtType || !date || !startTime) return;
-
-    const data = {
-      court_type: courtType,
-      date,
-      start_time: startTime,
-      hours,
-      equipment: equipmentArray,
-      coach
-    };
 
     fetch("http://localhost:5000/price", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        court_type: courtType,
+        date,
+        start_time: startTime,
+        hours,
+        equipment: equipmentArray,
+        coach
+      })
     })
       .then((res) => res.json())
       .then(setPriceData)
-      .catch((err) => console.error(err));
+      .catch(console.error);
   }, [courtType, date, startTime, hours, equipmentCount, coach]);
 
-  // Adjust booking hours
   const changeHours = (val) => {
     setHours((prev) => Math.max(1, prev + val));
   };
 
-  // Adjust equipment count
   const changeEquipment = (item, delta) => {
     setEquipmentCount((prev) => ({
       ...prev,
@@ -54,108 +49,91 @@ function App() {
     }));
   };
 
-  // Handle booking
   const handleBooking = () => {
-    if (!courtType || !date || !startTime) return;
-
-    const data = {
-      court_type: courtType,
-      date,
-      start_time: startTime,
-      hours,
-      equipment: equipmentArray,
-      coach
-    };
+    if (!priceData) return;
 
     fetch("http://localhost:5000/book", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        court_type: courtType,
+        date,
+        start_time: startTime,
+        hours,
+        equipment: equipmentArray,
+        coach
+      })
     })
       .then((res) => res.json())
-      .then((res) => {
-        if (res.message) setBookingMessage(res.message);
-        else setBookingMessage(res.error || "Booking failed");
-      })
-      .catch((err) => console.error(err));
+      .then((res) =>
+        setBookingMessage(res.message || res.error || "Booking failed")
+      )
+      .catch(console.error);
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
+    <div className="container">
+      <div className="card">
         <h3>Badminton Booking</h3>
 
-        <div style={styles.row}>
+        <div className="row">
           <label>Sport</label>
           <input type="text" value="Badminton" disabled />
         </div>
 
-        <div style={styles.row}>
+        <div className="row">
           <label>Date</label>
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
+          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         </div>
 
-        <div style={styles.row}>
+        <div className="row">
           <label>Start Time</label>
-          <input
-            type="time"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-          />
+          <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
         </div>
 
-        <div style={styles.row}>
+        <div className="row">
           <label>Duration</label>
-          <div style={styles.duration}>
-            <button onClick={() => changeHours(-1)}>−</button>
+          <div className="controls">
+            <button className="icon-btn" onClick={() => changeHours(-1)}>−</button>
             <span>{hours} Hr</span>
-            <button onClick={() => changeHours(1)}>+</button>
+            <button className="icon-btn" onClick={() => changeHours(1)}>+</button>
           </div>
         </div>
 
-        <div style={styles.row}>
+        <div className="row">
           <label>Court</label>
-          <select
-            value={courtType}
-            onChange={(e) => setCourtType(e.target.value)}
-          >
+          <select value={courtType} onChange={(e) => setCourtType(e.target.value)}>
             <option value="">-- Select Court --</option>
             <option value="indoor">Indoor Court</option>
             <option value="outdoor">Outdoor Court</option>
           </select>
         </div>
 
-        {/* Equipment selection with counts */}
-        <div style={styles.row}>
+        <div className="row">
           <label>Racket</label>
-          <button onClick={() => changeEquipment("racket", -1)}>−</button>
-          <span>{equipmentCount.racket}</span>
-          <button onClick={() => changeEquipment("racket", 1)}>+</button>
-        </div>
-        <div style={styles.row}>
-          <label>Shoes</label>
-          <button onClick={() => changeEquipment("shoes", -1)}>−</button>
-          <span>{equipmentCount.shoes}</span>
-          <button onClick={() => changeEquipment("shoes", 1)}>+</button>
+          <div className="controls">
+            <button className="icon-btn" onClick={() => changeEquipment("racket", -1)}>−</button>
+            <span>{equipmentCount.racket}</span>
+            <button className="icon-btn" onClick={() => changeEquipment("racket", 1)}>+</button>
+          </div>
         </div>
 
-        <div style={styles.row}>
-          <label>
-            <input
-              type="checkbox"
-              checked={coach}
-              onChange={(e) => setCoach(e.target.checked)}
-            />
-            Coach
-          </label>
+        <div className="row">
+          <label>Shoes</label>
+          <div className="controls">
+            <button className="icon-btn" onClick={() => changeEquipment("shoes", -1)}>−</button>
+            <span>{equipmentCount.shoes}</span>
+            <button className="icon-btn" onClick={() => changeEquipment("shoes", 1)}>+</button>
+          </div>
+        </div>
+
+        <div className="checkbox-row">
+          <input type="checkbox" checked={coach} onChange={(e) => setCoach(e.target.checked)} />
+          <label>Coach</label>
         </div>
 
         {priceData && (
-          <div style={styles.priceBox}>
+          <div className="price-box">
             <p>Base: ₹{priceData.base_hour_price}</p>
             <p>Equipment: ₹{priceData.equipment_cost}</p>
             <p>Coach: ₹{priceData.coach_cost}</p>
@@ -164,42 +142,17 @@ function App() {
         )}
 
         <button
-          style={{
-            ...styles.bookBtn,
-            backgroundColor: priceData ? "#28a745" : "#ccc"
-          }}
+          className={`book-btn ${priceData ? "active" : ""}`}
           onClick={handleBooking}
           disabled={!priceData}
         >
           Add To Cart
         </button>
 
-        {bookingMessage && (
-          <p style={{ marginTop: "10px" }}>{bookingMessage}</p>
-        )}
+        {bookingMessage && <p className="message">{bookingMessage}</p>}
       </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    fontFamily: "Arial",
-    display: "flex",
-    justifyContent: "center",
-    paddingTop: 40
-  },
-  card: {
-    background: "#fff",
-    padding: 20,
-    width: 350,
-    borderRadius: 8,
-    boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-  },
-  row: { marginBottom: 12, display: "flex", alignItems: "center", gap: "10px" },
-  duration: { display: "flex", justifyContent: "space-between", alignItems: "center" },
-  priceBox: { background: "#f0f0f0", padding: 10, marginTop: 10 },
-  bookBtn: { width: "100%", border: "none", padding: 10, marginTop: 10, color: "#fff", cursor: "pointer" }
-};
 
 export default App;
